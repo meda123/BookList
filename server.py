@@ -17,13 +17,26 @@ app.secret_key = "ABC"
 # silently. 
 app.jinja_env.undefined = StrictUndefined
 
+
+#####################################################################
+# App routes 
+
 @app.route('/')
 def home():
     """ Homepage - where user is asked to login. """
 
     return render_template("homepage.html")
 
+@app.route('/profile')
+def show_profile():
+    """ User's profile page, displays lists, logout, and add button."""
 
+    return render_template("profile.html") 
+
+
+
+#####################################################################
+# Helper functions 
 
 if __name__ == "__main__":
 # We have to set debug=True here, since it has to be True at the point

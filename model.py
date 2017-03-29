@@ -7,7 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 # find the `session` object, where we do most of our interactions
 # (like committing, etc.)
 
-
 db = SQLAlchemy()
 
 
@@ -15,7 +14,67 @@ db = SQLAlchemy()
 # Model definitions 
 # NOTA: Will add this once I have my database model approved 
 
+class User(db.Model):
+    """ User of booklist app. """
 
+    __tablename__ = "users"
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(60), nullable=False)
+    last = db.Column(db.String(60), nullable=False)
+    email = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    goodreads_id = db.Column(db.String(60), nullable=True)
+
+
+    def __repr__(self):
+        """Helpful representation when printed."""
+        return "<User user_id=%s name=%s> email=%s" % (self.user_id,
+                                               self.name, self.email)
+
+class List(db.Model):
+    """List belonging to each user."""
+
+    __tablename__ ="lists"
+
+    list_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    list_name = db.Column(db.String(60), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    #define relationship to user
+    user = db.relationship("User", backref=db.backref("lists",order_by=list_id))
+
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        m = "<List list_id=%s list_name=%s user_id=%s>"
+        return m %(self.list_id, self.list_name, self.user_id)
+
+
+class List_Book(db.Model):
+    """Middle table connects lists table to books table"""
+
+
+    __tablename__ = "list_books"
+
+    list_book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    list_id = db.Column(db.String(60), db.ForeignKey('lists.list_id'))
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
+    sequence = db.Column(db.Integer, nullable=False)
+    book_read = db.Column(db.Boolean, nullable=True)
+
+
+class Book(db.Model):
+    """Book on the booklist app."""
+
+    __tablename__ = "books"
+
+    book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    book_name = db.Column(db.String (60), nullable=False)
+    book_author = db.Column(db.String (60), nullable=False)
+    book_author_2 = db.Column(db.String(60), nullable=True)
+    book_cover = db.Column(db.String(300), nullable=True)
 
 
 #####################################################################
