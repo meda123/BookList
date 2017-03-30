@@ -5,6 +5,14 @@
 </head>
 <body>
 
+BookList 
+
+{% if "user_id" in session %}
+    <a href="/logout">Logout</a>
+{% else %}
+    <a href="/login">Login</a>
+{% endif %}
+
 
 {% block content %}
     Here is your body content 

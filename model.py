@@ -12,7 +12,6 @@ db = SQLAlchemy()
 
 #####################################################################
 # Model definitions 
-# NOTA: Will add this once I have my database model approved 
 
 class User(db.Model):
     """ User of booklist app. """
@@ -22,9 +21,9 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
     last = db.Column(db.String(60), nullable=False)
-    email = db.Column(db.String(60), nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    goodreads_id = db.Column(db.String(60), nullable=True)
+    email = db.Column(db.String(60), nullable=True)
+    password = db.Column(db.String(60), nullable=True)
+    goodreads_id = db.Column(db.Integer, nullable=True)
 
 
     def __repr__(self):
