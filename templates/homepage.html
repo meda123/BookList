@@ -1,15 +1,25 @@
-{% extends 'base.html' %}
-{% block content %}
+<!doctype html> 
+<html>
 
-  <h1>Booklist App</h1>
+<head>
+    {% extends 'base.html' %} | Homepage | {% block content %}
+</head>
+
+
+<body>
+
+<h1>Booklist App</h1>
 
   <p> Welcome to Booklist App, please login to view your
         magical reading list </p>
 
-<h2> Facebook login </h2>
+
+<p> <a href="http://0.0.0.0:5000/profile"> Facebook login </a></p>
 <br>
-<h2> Goodreads login </h2>
+<br>
+<p> Goodreads login <p>
 
 
-
+</body>
 {% endblock %}
+</html>

@@ -19,7 +19,7 @@ rdict = xmltodict.parse(r.content)
 # Parses through intro tags and summaries and takes us to body of results 
 result_body = rdict.get('GoodreadsResponse', 'notfound').get('search', 'notfound1').get('results', 'notfound2').get('work', 'nf3')
 
-# Book info for second result 
+# Book info for first result 
 first_result = result_body[0].values()[8].values()
 title = first_result[2]
 print title
@@ -36,18 +36,6 @@ author2 = second_result[3].values()[1]
 print author2
 image2 = second_result[4]
 print image2 
-
-# Book info for second result 
-second_result = result_body[1].values()[8].values()
-title2 = second_result[2]
-print title2
-author2 = second_result[3].values()[1] 
-print author2
-image2 = second_result[4]
-print image2 
-
-
-# def show_books(trythis):
 
 
 

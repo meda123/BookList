@@ -1,13 +1,34 @@
-{% extends 'base.html' %}
-{% block content %}
+<!doctype html> 
+<html>
 
-  <h1> Welcome to Booklist! </h1>
-
-  <h2> Your lists <h2> <br><br>
-
-
-  <h1> <a href "search.html"> ADD A BOOK + </a> <h1>
+<head>
+    {% extends 'base.html' %} | Profile Page | {% block content %}
+</head>
 
 
+<body>
 
+
+<h1> Welcome to Booklist! </h1>
+
+<h1> Your lists <h1> <br><br>
+
+ <form action = "/results" method="POST">
+    <label for ="search-input"> I'd like to add a book: </label>
+    <input type = "text" name="search_box" id ="search-input">
+    <input id="submit_button" type="submit">
+  </form>
+
+
+</body>
 {% endblock %}
+</html>
+
+
+ 
+
+
+
+
+ 
+
