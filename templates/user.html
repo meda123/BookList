@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <p> Welcome {{user.name}}! </p>
+
+  <p> Your lists are: </p> <br> <br>
+
+
+<form action="/add_list" method="POST">
+
+    <div>
+        <label>
+            Type a list name
+            <input type="list_name" name="list_name">
+            <input type="submit" value="Make new list">
+        </label>
+
+    </div>
+
+
+</form>
+
+
+{% endblock %}
+
+

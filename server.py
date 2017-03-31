@@ -98,20 +98,40 @@ def logout():
 
 @app.route("/users/<int:user_id>")
 def user_details(user_id):
-    """ Show info about user."""
+    """ Show info about user, displays reading lists, and add book button."""
 
     user = User.query.get(user_id)
     return render_template("user.html", user=user)
 
 
-@app.route('/profile')
-def show_profile():
-    """ User's profile page, displays lists, logout, and add button."""
+@app.route('/add_list', methods=['POST'])
+def process_list():
+    """ If user is logged in, let them add/edit a list."""
 
-    return render_template("profile.html") 
+    user_id=session.get("user_id")
+
+    if user_id:
+        list_name = request.form["list_name"] 
+        new_list = List(list_name=list_name, user_id=user_id)
+        db.session.add(new_list)
+        db.session.commit()
+
+    else:
+        list_name = None
+
+
+    flash("List added")
+    return redirect("/users/%s" %user_id)
+
+
+
+
+
+
 
 @app.route('/results', methods=["POST"])
 def view_results():
+    """ Allows user to search books to add them to a list."""
 
     user_search = request.form.get("search_box")
     search_result = query_gr("%s" % user_search)
