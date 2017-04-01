@@ -5,12 +5,14 @@
 </head>
 <body>
 
-BookList 
+BookList: Changing how use our reading lists
+
 
 {% if "user_id" in session %}
     <a href="/logout">Logout</a>
 {% else %}
-    <a href="/login">Login</a>
+    <li> <a href="/login">Login</a> </li>
+    <li> <a href="/register_form"> New User? Register! </a> </li>
 {% endif %}
 
 

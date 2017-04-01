@@ -31,7 +31,7 @@ class User(db.Model):
         return "<User user_id=%s name=%s> email=%s" % (self.user_id,
                                                self.name, self.email)
 
-class List(db.Model):
+class Lista(db.Model):
     """List belonging to each user."""
 
     __tablename__ ="lists"
@@ -47,7 +47,7 @@ class List(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        m = "<List list_id=%s list_name=%s user_id=%s>"
+        m = "<Lista list_id=%s list_name=%s user_id=%s>"
         return m %(self.list_id, self.list_name, self.user_id)
 
 

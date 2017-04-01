@@ -10,13 +10,18 @@
 <body>
 
     <h1>Select the book you'd like to add </h1>
+    <p> Here are our results for {{user_search}} : </p> <br>
 
-    <p> Here are our results for {{user_search}} : </p>
-
-    <p> Your book is {{search_result}} : </p>
+    <{% for one_result in search_result %}
+        <li>{% for one_result in range(0,3) %} </li>
+        <p> {{one_result}} </p>
+            {% endfor %}
+    {% endfor %}
 
 
 </body>
 {% endblock %}
 </html>
+
+
 

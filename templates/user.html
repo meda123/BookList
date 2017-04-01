@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <p> Welcome {{user.name}}! </p>
+  <p> Welcome {{user.name}}! </p> <br>
 
-  <p> Your lists are: </p> <br> <br>
+<form action = "/results" method="POST">
+    <label for ="search-input"> I'd like to add a book: </label>
+    <input type = "text" name="search_box" id ="search-input">
+    <input id="submit_button" type="submit">
+  </form>
+
+
+  <p> Your lists are: </p> 
+{% for user_list in user_lists %}
+    <li> {{ user_list.list_name }} </li>
+{% endfor %}
+
+    <br>
+    <br>
+    <br>
 
 
 <form action="/add_list" method="POST">

@@ -1,4 +1,6 @@
 env/
-.DS_Store
+functiongr.py
+functiongr.pyc
 model.pyc
 server.pyc
+scratch.py

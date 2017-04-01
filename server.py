@@ -11,7 +11,8 @@ import xmltodict
 from json import dumps
 
 
-from model import connect_to_db, User, List, List_Book, Book, db
+from model import connect_to_db, User, Lista, List_Book, Book, db
+from functiongr import query_gr
 
 app = Flask(__name__)
 
@@ -55,8 +56,8 @@ def register_process():
 
     session['user_id'] = new_user.user_id 
 
-    flash("User %s added" % name)
-    return redirect("/")
+    flash("User %s added, please login with your credentials" % name)
+    return redirect("/users/%s" % new_user.user_id)
 
 @app.route('/login', methods=['GET'])
 def login_form():
@@ -101,7 +102,9 @@ def user_details(user_id):
     """ Show info about user, displays reading lists, and add book button."""
 
     user = User.query.get(user_id)
-    return render_template("user.html", user=user)
+    user_lists = Lista.query.filter(Lista.user_id == user_id).all()
+     
+    return render_template("user.html", user=user, user_lists=user_lists)
 
 
 @app.route('/add_list', methods=['POST'])
@@ -112,7 +115,7 @@ def process_list():
 
     if user_id:
         list_name = request.form["list_name"] 
-        new_list = List(list_name=list_name, user_id=user_id)
+        new_list = Lista(list_name=list_name, user_id=user_id)
         db.session.add(new_list)
         db.session.commit()
 
@@ -138,33 +141,10 @@ def view_results():
 
     return render_template("results.html", user_search=user_search, search_result=search_result)
 
-    # return render_template("results.html", find=user_search)
-
 
 
 
 #####################################################################
-# Helper functions 
-
-# NOTA: This function returns ONLY the FIRST result 
-def query_gr(user_query):
-
-    query_api = requests.get("https://www.goodreads.com/search.xml?key=xPgdvQL3gCl9ImmVLdJ8A&q={0}".format(user_query))
-
-    ## Change xml to ordered dictionary (note ALL results are provided)
-    rdict = xmltodict.parse(query_api.content)
-
-    # Parses through intro tags and summaries and takes us to body of results 
-    result_body = rdict.get('GoodreadsResponse', 'notfound').get('search', 'notfound1').get('results', 'notfound2').get('work', 'nf3')
-
-    first_result = result_body[0].values()[8].values()
-
-    title = first_result[2] 
-    author = first_result[3].values()[1]
-    image = first_result[4]
-
-    return ["Title: %s Author: %s Image: %s" % (title, author, image)]
-
 
 
 if __name__ == "__main__":
