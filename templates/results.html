@@ -12,11 +12,10 @@
     <h1>Select the book you'd like to add </h1>
     <p> Here are our results for {{user_search}} : </p> <br>
 
-    <{% for one_result in search_result %}
-        <li>{% for one_result in range(0,3) %} </li>
-        <p> {{one_result}} </p>
-            {% endfor %}
-    {% endfor %}
+    {% for i in range(0,6) %}
+    <li> {{ search_result[i][0]}}  {{ search_result[i][1]}} </li>
+    <img src = {{search_result[i][2]}}> 
+        {% endfor %}
 
 
 </body>
@@ -24,4 +23,25 @@
 </html>
 
 
+
+
+
+
+
+
+
+
+
+
+<!-- <body>
+
+    <h1>Select the book you'd like to add </h1>
+    <p> Here are our results for {{user_search}} : </p> <br>
+
+    <{% for one_result in search_result %}
+    <li> {{ one_result}}  </li>
+        {% endfor %}
+
+</body>
+ -->
 
