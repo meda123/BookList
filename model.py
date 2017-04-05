@@ -58,10 +58,16 @@ class List_Book(db.Model):
     __tablename__ = "list_books"
 
     list_book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    list_id = db.Column(db.String(60), db.ForeignKey('lists.list_id'))
+    list_id = db.Column(db.Integer, db.ForeignKey('lists.list_id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
     sequence = db.Column(db.Integer, nullable=False)
     book_read = db.Column(db.Boolean, nullable=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        m = "<List_Book list_book_id=%s list_id=%s book_id=%s>"
+        return m %(self.list_book_id, self.list_id, self.book_id)
 
 
 class Book(db.Model):
@@ -70,10 +76,17 @@ class Book(db.Model):
     __tablename__ = "books"
 
     book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    book_name = db.Column(db.String (60), nullable=False)
-    book_author = db.Column(db.String (60), nullable=False)
-    book_author_2 = db.Column(db.String(60), nullable=True)
+    book_title = db.Column(db.String (200), nullable=True)
+    book_author = db.Column(db.String (200), nullable=True)
+    book_author_2 = db.Column(db.String(200), nullable=True)
     book_cover = db.Column(db.String(300), nullable=True)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        m = "<Book book_id=%s book_title=%s book_author=%s book_cover=%s >"
+        return m %(self.book_id, self.book_title, self.book_author, self.book_cover)
+
 
 
 #####################################################################

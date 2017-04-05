@@ -1,4 +1,3 @@
-
 <!doctype html> 
 <html>
 
@@ -9,14 +8,45 @@
 
 <body>
 
-    <h1>Select the book you'd like to add </h1>
+<h1>Select the book you'd like to add </h1>
     <p> Here are our results for {{user_search}} : </p> <br>
+    <form id="add-book-form" method="post" action="/add_book">
 
-    {% for i in range(0,6) %}
-    <li> {{ search_result[i][0]}}  {{ search_result[i][1]}} </li>
-    <img src = {{search_result[i][2]}}> 
+        <div class="form-group">
+        <label for="book-title">Results</label>
+        <select id="book-select" name="book" class="form-control" id="book">
+
+        {% for i in range(0,6) %}
+            <option value="{{ search_result[i][0] }}"
+            data-title="{{ search_result[i][0] }}"  
+            data-author="{{ search_result[i][1] }}"
+            data-cover="{{ search_result[i][2] }}"  
+            >
+        {{ search_result[i][0]}} by {{ search_result[i][1]}}   </option>
         {% endfor %}
 
+         </select>
+        </div> 
+
+        <input type = "hidden" name="title" id="title" value = "{{search_result[0][0]}}">
+        <input type = "hidden" name="author" id="author" value = "{{search_result[0][1]}}">
+        <input type = "hidden" name="cover" id="cover" value = "{{search_result[0][2]}}">
+
+        <input type="submit" class="btn btn-primary">
+    </form>
+
+<!-- Helps us select all three items to send back to /add_book route -->
+<script>
+    $('#book-select').on('change', function(evt){
+        var selectedObj = $(evt.currentTarget).find('option:selected').data();
+
+        var titleSelect = $("#title").val(selectedObj.title);
+        var titleSelect = $("#author").val(selectedObj.author);
+        var titleSelect = $("#cover").val(selectedObj.cover);
+
+
+    });
+</script>
 
 </body>
 {% endblock %}
@@ -27,21 +57,4 @@
 
 
 
-
-
-
-
-
-
-<!-- <body>
-
-    <h1>Select the book you'd like to add </h1>
-    <p> Here are our results for {{user_search}} : </p> <br>
-
-    <{% for one_result in search_result %}
-    <li> {{ one_result}}  </li>
-        {% endfor %}
-
-</body>
- -->
 

@@ -1,26 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  <p> Welcome {{user.name}}! </p> <br>
+<p> Welcome {{user.name}}! </p> <br>
 
 <form action = "/results" method="POST">
-    <label for ="search-input"> I'd like to add a book: </label>
-    <input type = "text" name="search_box" id ="search-input">
+    <label for = "search-input"> I'd like to add a book: </label>
+    <input type = "text" name = "search_box" id = "search-input">
     <input id="submit_button" type="submit">
   </form>
 
 
+<!-- Creates drop-down view of all the lists a user has created -->
+</br>
+<form id = "view-list-form" action = "/view_list" method="POST">
 
-  <p> Your lists are: </p> 
-{% for user_list in user_lists %}
-    <li> {{ user_list.list_name }} </li>
-{% endfor %}
+    <label for="list-name"> Your lists </label>
+    <select id="list-select" name="list-name" class="list-name">
 
-    <br>
-    <br>
-    <br>
+        {% for user_list in user_lists %}
+            <option value = "{{ user_list.list_name }}"> {{ user_list.list_name }}
+            </option>
+        {% endfor %}
+    </select> 
+    <input type="submit" class="btn btn-primary">
+</form>
+
+<script>
+    $('view-list-form').on('change', function(evt) {
+        var selectedList = $(evt.currentTarget).find('option:select').data();
+    });
+</script>
 
 
+
+<br>
 <form action="/add_list" method="POST">
 
     <div>
@@ -37,5 +50,8 @@
 
 
 {% endblock %}
+
+
+
 
 

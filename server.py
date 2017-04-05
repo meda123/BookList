@@ -1,18 +1,22 @@
 """ Booklist App """
+import unicodedata
+
+# used for Gooreads API 
+import requests 
+import xmltodict
+from json import dumps
+import os
+
+gr_api_key = os.environ['goodreads_key']
 
 from jinja2 import StrictUndefined 
 
 from flask import Flask, render_template, request, flash, redirect, session 
 from flask_debugtoolbar import DebugToolbarExtension 
 
-# Need these to interpret Goodreads API response  
-import requests 
-import xmltodict
-from json import dumps
-
 
 from model import connect_to_db, User, Lista, List_Book, Book, db
-from functiongr import query_gr
+# from functiongr import query_gr
 
 app = Flask(__name__)
 
@@ -109,9 +113,9 @@ def user_details(user_id):
 
 @app.route('/add_list', methods=['POST'])
 def process_list():
-    """ If user is logged in, let them add/edit a list."""
+    """ If user is logged in, allow them to select a list."""
 
-    user_id=session.get("user_id")
+    user_id = session.get("user_id")
 
     if user_id:
         list_name = request.form["list_name"] 
@@ -126,6 +130,51 @@ def process_list():
     flash("List added")
     return redirect("/users/%s" %user_id)
 
+
+
+@app.route('/view_list', methods=['POST'])
+def select_list():
+    """If user is logged in and selected a list, let them view that list's details."""
+    
+    user_id = session.get("user_id") 
+    list_name = request.form["list-name"] 
+    list_id = Lista.query.filter_by(list_name=list_name).first().list_id
+    
+    return redirect("/view_list/%s" % list_id)
+
+
+@app.route("/view_list/<int:list_id>")
+def list_details(list_id):
+
+    user = Lista.query.get(list_id).user_id
+    list_name = Lista.query.get(list_id).list_name
+
+    return render_template("view_list.html", list_name=list_name)
+
+
+@app.route('/add_book', methods=['POST'])
+def add_book():
+    """ If user us logged in, allow them to add/del a book from a list."""
+    user_id=session.get("user_id")
+
+    if user_id:
+        # This here collect info from the API results 
+        book_title = request.form.get("title")
+        book_author = request.form.get("author")
+        book_cover = request.form.get("cover")
+
+        #Is this book in the DB?  # Yes? ADD to Lista 
+        # if (Book.query.filter(Book.book_title == "{}", Book.book_author == "{}").format(book_title, book_author)):
+
+        # NO? If book NOT id DB, add to DB AND to LISTA 
+        # new_record = Book(book_title=book_title, book_author=book_author,book_cover=book_cover)
+        # db.session.add(new_record)
+        # db.session.commit()
+    else:
+        new_book = None 
+
+    flash("List added")
+    return redirect("/users/%s" %user_id)
 
 
 
@@ -143,8 +192,34 @@ def view_results():
 
 
 
-
 #####################################################################
+# Helper functions 
+
+def query_gr(user_query):
+    """ This function sends an search request to the Goodreads API, we receive the
+    top 20 results associated with key words (author, title, isbn)."""
+    
+    query_api = requests.get("https://www.goodreads.com/search.xml?key={}&q={}".format(gr_api_key, user_query))
+
+    ## Change xml to ordered dictioanary (note ALL results are provided)
+    rdict = xmltodict.parse(query_api.content)
+
+    # Parses through intro tags and summaries and takes us to body of results 
+    result_body = rdict.get('GoodreadsResponse', 'notfound').get('search', 'notfound1').get('results', 'notfound2').get('work', 'nf3')
+
+    result= {}
+    for i in range(0,6):
+
+        first_result = result_body[i].values()[8].values()
+
+        titles = first_result[2] 
+        authors = first_result[3].values()[1]
+        images = first_result[4]
+        outputs = (titles, authors, images)
+        result[i] = outputs 
+
+
+    return result
 
 
 if __name__ == "__main__":
@@ -159,4 +234,4 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
 
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
