@@ -154,42 +154,38 @@ def list_details(list_id):
 
 @app.route('/add_book', methods=['POST'])
 def add_book():
-    """ If user us logged in, allow them to add/del a book from a list."""
+    """ If user us logged in, allow them to add a book to a list."""
     user_id=session.get("user_id")
 
     if user_id:
-        # Collect info from the API results (to check against Book table)
+        # Collect info from the API results (to check against books table)
         book_title = request.form.get("title")
         book_author = request.form.get("author")
         book_cover = request.form.get("cover")
 
-       
-        #Query to see if the combination of book & author exist in the books table
+        # Query to see if the combination of book & author exist in the books table
         title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
-        print title_author_query
+        list_name = request.form.get("list-name")
+        list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
 
+        # If book doesn't exist in books table, add to books table and to list
         if title_author_query == []:
-            # print "Not in DB, add to DB and to user's list"
             book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
             db.session.add(book_to_db)
             db.session.commit()
 
-             # Collect info to add to the list_books table
-            list_name = request.form.get("list-name")
-            list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
-            book_id = book_to_db.book_id
-            book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
+            # Collect info to add to the list_books table
+            new_book_id = book_to_db.book_id
+            book_to_listbook = List_Book(list_id=list_id, book_id=new_book_id)
             db.session.add(book_to_listbook)
             db.session.commit()
 
         else: 
-            print "In DB...so only add to user's list"
-            # list_name = request.form.get("list-name")
-            # list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
-            # book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
-            # book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
-            # db.session.add(book_to_listbook)
-            # db.session.commit()
+            # Book exists in books table, so only add to list_books table 
+            book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
+            book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
+            db.session.add(book_to_listbook)
+            db.session.commit()
 
     else:
         new_book = None 
