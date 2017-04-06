@@ -8,6 +8,9 @@
 
 <body>
 
+
+Ideally: Set up form so that once you select a book
+
 <h1>Select the book you'd like to add </h1>
     <p> Here are our results for {{user_search}} : </p> <br>
     <form id="add-book-form" method="post" action="/add_book">
@@ -32,28 +35,40 @@
         <input type = "hidden" name="author" id="author" value = "{{search_result[0][1]}}">
         <input type = "hidden" name="cover" id="cover" value = "{{search_result[0][2]}}">
 
-        <input type="submit" class="btn btn-primary">
-    </form>
 
-<!-- Helps us select all three items to send back to /add_book route -->
+        <div>
+        <label for="list-name"> Your lists </label>
+        <select id="list-select" name="list-name" class="list-name">
+
+            {% for user_list in user_lists %}
+                <option value = "{{ user_list.list_name }}"> {{ user_list.list_name }}
+                </option>
+            {% endfor %}
+        </select> 
+        <div> 
+        <input type="submit" class="btn btn-primary">
+</form>
+
 <script>
+//function helps us select all three items to send back to /add_book route
     $('#book-select').on('change', function(evt){
         var selectedObj = $(evt.currentTarget).find('option:selected').data();
 
         var titleSelect = $("#title").val(selectedObj.title);
         var titleSelect = $("#author").val(selectedObj.author);
         var titleSelect = $("#cover").val(selectedObj.cover);
-
-
     });
+
+//function helps us select a list from reading list. 
+    $('view-list-form').on('change', function(evt) {
+        var selectedList = $(evt.currentTarget).find('option:select').data();
+    });
+
 </script>
 
 </body>
 {% endblock %}
 </html>
-
-
-
 
 
 

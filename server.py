@@ -158,26 +158,33 @@ def add_book():
     user_id=session.get("user_id")
 
     if user_id:
-        # This here collect info from the API results 
+        # Collect info from the API results (to check against Book table)
         book_title = request.form.get("title")
         book_author = request.form.get("author")
         book_cover = request.form.get("cover")
 
-        #Is this book in the DB?  # Yes? ADD to Lista 
-        # if (Book.query.filter(Book.book_title == "{}", Book.book_author == "{}").format(book_title, book_author)):
+        #Is this book in the DB? 
+        title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
+        print title_author_query
 
-        # NO? If book NOT id DB, add to DB AND to LISTA 
-        # new_record = Book(book_title=book_title, book_author=book_author,book_cover=book_cover)
-        # db.session.add(new_record)
-        # db.session.commit()
+        if title_author_query == []:
+            print "Not in DB, add to DB and to user's list"
+        else: 
+            print "In DB...so only add to user's list "
+
+
+
+        #Collect info to add book to specific list 
+        list_name = request.form.get("list-name")
+        print list_name
+        # book_id = Lista.query.get(list_id).list_name
+
+
     else:
         new_book = None 
 
-    flash("List added")
+    flash("Book added to [add list name]")
     return redirect("/users/%s" %user_id)
-
-
-
 
 
 
@@ -188,7 +195,11 @@ def view_results():
     user_search = request.form.get("search_box")
     search_result = query_gr("%s" % user_search)
 
-    return render_template("results.html", user_search=user_search, search_result=search_result)
+    user_id=session.get("user_id")
+
+    user_lists = Lista.query.filter(Lista.user_id == user_id).all()
+
+    return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
 
 
 

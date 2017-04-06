@@ -61,7 +61,7 @@ class List_Book(db.Model):
     list_id = db.Column(db.Integer, db.ForeignKey('lists.list_id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
     sequence = db.Column(db.Integer, nullable=False)
-    book_read = db.Column(db.Boolean, nullable=True)
+    book_read = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
