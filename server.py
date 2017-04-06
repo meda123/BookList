@@ -163,22 +163,33 @@ def add_book():
         book_author = request.form.get("author")
         book_cover = request.form.get("cover")
 
-        #Is this book in the DB? 
+       
+        #Query to see if the combination of book & author exist in the books table
         title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
         print title_author_query
 
         if title_author_query == []:
-            print "Not in DB, add to DB and to user's list"
+            # print "Not in DB, add to DB and to user's list"
+            book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
+            db.session.add(book_to_db)
+            db.session.commit()
+
+             # Collect info to add to the list_books table
+            list_name = request.form.get("list-name")
+            list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
+            book_id = book_to_db.book_id
+            book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
+            db.session.add(book_to_listbook)
+            db.session.commit()
+
         else: 
-            print "In DB...so only add to user's list "
-
-
-
-        #Collect info to add book to specific list 
-        list_name = request.form.get("list-name")
-        print list_name
-        # book_id = Lista.query.get(list_id).list_name
-
+            print "In DB...so only add to user's list"
+            # list_name = request.form.get("list-name")
+            # list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
+            # book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
+            # book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
+            # db.session.add(book_to_listbook)
+            # db.session.commit()
 
     else:
         new_book = None 

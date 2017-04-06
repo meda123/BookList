@@ -60,7 +60,7 @@ class List_Book(db.Model):
     list_book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     list_id = db.Column(db.Integer, db.ForeignKey('lists.list_id'))
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
-    sequence = db.Column(db.Integer, nullable=False)
+    sequence = db.Column(db.Integer, nullable=True)
     book_read = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
