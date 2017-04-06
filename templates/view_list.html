@@ -3,14 +3,25 @@
 
 <head>
     {% extends 'base.html' %} | Results page | {% block content %}
+
+    
 </head>
 
 
 <body>
 
-<h1> Here are the books for {{ list_name }}  </h1>
+<h1> Here are the books for {{ list_name }} </h1>
 
+{% for list_book in all_books %}
+<div>
 
+    <p> {{ list_book.book.book_title }} </p>
+    <p> {{ list_book.book.book_author }} </p>
+    <img src= "{{ list_book.book.book_cover }}" draggable="true"> 
+    <br> <br> <br> <br>
+</div>
+
+{% endfor %}
 
 
 </body>

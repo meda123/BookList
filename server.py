@@ -16,16 +16,15 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 
 from model import connect_to_db, User, Lista, List_Book, Book, db
-# from functiongr import query_gr
 
 app = Flask(__name__)
 
 # This is required to use my Flask sessions and the debug toolbar 
 app.secret_key = "ABC"
 
-#This is in case Jinja2 fails, it will raise an errror, it's default is to fail 
-# silently. 
+#This is in case Jinja2 fails, it will raise an error, otherwise it fails silenty.
 app.jinja_env.undefined = StrictUndefined
+app.jinja_env.auto_reload = True 
 
 
 #####################################################################
@@ -134,7 +133,7 @@ def process_list():
 
 @app.route('/view_list', methods=['POST'])
 def select_list():
-    """If user is logged in and selected a list, let them view that list's details."""
+    """If user is logged in, allow them to select a list and collect the list name they select"""
     
     user_id = session.get("user_id") 
     list_name = request.form["list-name"] 
@@ -145,11 +144,16 @@ def select_list():
 
 @app.route("/view_list/<int:list_id>")
 def list_details(list_id):
+    """If user is logged and selection has been made, display the books contained in a list."""
 
-    user = Lista.query.get(list_id).user_id
+    user_id = session.get("user_id")
     list_name = Lista.query.get(list_id).list_name
 
-    return render_template("view_list.html", list_name=list_name)
+    all_books = List_Book.query.filter(List_Book.list_id=='{}'.format(list_id)).all()
+    print all_books
+
+
+    return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books)
 
 
 @app.route('/add_book', methods=['POST'])
@@ -203,7 +207,6 @@ def view_results():
     search_result = query_gr("%s" % user_search)
 
     user_id=session.get("user_id")
-
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
     return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)

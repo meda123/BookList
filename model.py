@@ -63,6 +63,11 @@ class List_Book(db.Model):
     sequence = db.Column(db.Integer, nullable=True)
     book_read = db.Column(db.Boolean, nullable=False, default=False)
 
+    #define relationship to user
+    book = db.relationship("Book", backref=db.backref("list_books",order_by=list_book_id))
+    lista = db.relationship("Lista", backref=db.backref("list_books",order_by=list_book_id))
+
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
