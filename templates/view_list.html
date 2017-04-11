@@ -3,27 +3,37 @@
 
 <head>
     {% extends 'base.html' %} | Results page | {% block content %}
-
-    
+    <meta charset="utf-8">
+    <title>sortable demo</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 
 
 <body>
 
+
 <h1> Here are the books for {{ list_name }} </h1>
 
-{% for list_book in all_books %}
-<div>
 
-    <p> {{ list_book.book.book_title }} </p>
-    <p> {{ list_book.book.book_author }} </p>
-    <img src= "{{ list_book.book.book_cover }}" draggable="true"> 
-    <br> <br> <br> <br>
+<div>
+<ul id="sortable">
+{% for list_book in all_books %}
+    <li> {{ list_book.book.book_title }} by {{ list_book.book.book_author }} </li>
+{% endfor %}
+</ul>
 </div>
 
-{% endfor %}
+
+<script>$("#sortable").sortable();</script>
 
 
 </body>
 {% endblock %}
 </html>
+
+
+
+
+<!-- <img src= "{{ list_book.book.book_cover }}">  Shows pics -->

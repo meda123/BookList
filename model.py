@@ -63,8 +63,10 @@ class List_Book(db.Model):
     sequence = db.Column(db.Integer, nullable=True)
     book_read = db.Column(db.Boolean, nullable=False, default=False)
 
-    #define relationship to user
+    #define relationships to Book 
     book = db.relationship("Book", backref=db.backref("list_books",order_by=list_book_id))
+    
+    #define relationships to Lista 
     lista = db.relationship("Lista", backref=db.backref("list_books",order_by=list_book_id))
 
 

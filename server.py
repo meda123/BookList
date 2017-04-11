@@ -201,7 +201,7 @@ def add_book():
 
 @app.route('/results', methods=["POST"])
 def view_results():
-    """ Allows user to search books to add them to a list."""
+    """ Allows user to search books to add them to a list of their choice."""
 
     user_search = request.form.get("search_box")
     search_result = query_gr("%s" % user_search)
