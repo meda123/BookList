@@ -1,21 +1,10 @@
 """ Booklist App """
 import unicodedata
-
-# used for Gooreads API 
-import requests 
-import xmltodict
-from json import dumps
-import os
-
-gr_api_key = os.environ['goodreads_key']
-
 from jinja2 import StrictUndefined 
-
 from flask import Flask, render_template, request, flash, redirect, session 
 from flask_debugtoolbar import DebugToolbarExtension 
-
-
 from model import connect_to_db, User, Lista, List_Book, Book, db
+import server_helper 
 
 app = Flask(__name__)
 
@@ -162,35 +151,25 @@ def add_book():
     user_id=session.get("user_id")
 
     if user_id:
-        # Collect info from the API results (to check against books table)
+        # Collect info from the API results 
         book_title = request.form.get("title")
         book_author = request.form.get("author")
         book_cover = request.form.get("cover")
 
-        # Query to see if the combination of book & author exist in the books table
-        title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
+        # Collect list information 
         list_name = request.form.get("list-name")
         list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
 
-        # If book doesn't exist in books table, add to books table and to list
-        if title_author_query == []:
-            book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
-            db.session.add(book_to_db)
-            db.session.commit()
+        book_in_db = server_helper.check_books(book_title, book_author)
 
-            # Collect info to add to the list_books table
-            new_book_id = book_to_db.book_id
-            book_to_listbook = List_Book(list_id=list_id, book_id=new_book_id)
-            db.session.add(book_to_listbook)
-            db.session.commit()
-
-        else: 
-            # Book exists in books table, so only add to list_books table 
+        if book_in_db: 
             book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
-            book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
-            db.session.add(book_to_listbook)
-            db.session.commit()
+            server_helper.add_to_list_book(list_id, book_id)
 
+        else:  
+            add_book = server_helper.add_to_books_table(book_title, book_author, book_cover)
+            new_book_id = add_book.book_id
+            server_helper.add_to_list_book(list_id, new_book_id)
     else:
         new_book = None 
 
@@ -198,13 +177,12 @@ def add_book():
     return redirect("/users/%s" %user_id)
 
 
-
 @app.route('/results', methods=["POST"])
 def view_results():
     """ Allows user to search books to add them to a list of their choice."""
 
     user_search = request.form.get("search_box")
-    search_result = query_gr("%s" % user_search)
+    search_result = server_helper.query_gr("%s" % user_search)
 
     user_id=session.get("user_id")
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
@@ -214,33 +192,51 @@ def view_results():
 
 
 #####################################################################
-# Helper functions 
 
-def query_gr(user_query):
-    """ This function sends an search request to the Goodreads API, we receive the
-    top 20 results associated with key words (author, title, isbn)."""
-    
-    query_api = requests.get("https://www.goodreads.com/search.xml?key={}&q={}".format(gr_api_key, user_query))
+# KEEPING THIS HERE: As I edit the /add_book route 
 
-    ## Change xml to ordered dictioanary (note ALL results are provided)
-    rdict = xmltodict.parse(query_api.content)
+# @app.route('/add_book', methods=['POST'])
+# def add_book():
+#     """ If user us logged in, allow them to add a book to a list."""
+#     user_id=session.get("user_id")
 
-    # Parses through intro tags and summaries and takes us to body of results 
-    result_body = rdict.get('GoodreadsResponse', 'notfound').get('search', 'notfound1').get('results', 'notfound2').get('work', 'nf3')
+#     if user_id:
+#         # Collect info from the API results (to check against books table)
+#         book_title = request.form.get("title")
+#         book_author = request.form.get("author")
+#         book_cover = request.form.get("cover")
 
-    result= {}
-    for i in range(0,6):
+#         # Query to see if the combination of book & author exist in the books table
+#         title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
+#         list_name = request.form.get("list-name")
+#         list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
 
-        first_result = result_body[i].values()[8].values()
+#         # If book doesn't exist in books table, add to books table and to list
+#         if title_author_query == []:
+#             book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
+#             db.session.add(book_to_db)
+#             db.session.commit()
 
-        titles = first_result[2] 
-        authors = first_result[3].values()[1]
-        images = first_result[4]
-        outputs = (titles, authors, images)
-        result[i] = outputs 
+#             # Collect info to add to the list_books table
+#             new_book_id = book_to_db.book_id
+#             book_to_listbook = List_Book(list_id=list_id, book_id=new_book_id)
+#             db.session.add(book_to_listbook)
+#             db.session.commit()
+
+#         else: 
+#             # Book exists in books table, so only add to list_books table 
+#             book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
+#             book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
+#             db.session.add(book_to_listbook)
+#             db.session.commit()
+
+#     else:
+#         new_book = None 
+
+#     flash("Book added to [add list name]")
+#     return redirect("/users/%s" %user_id)
 
 
-    return result
 
 
 if __name__ == "__main__":
@@ -256,3 +252,7 @@ if __name__ == "__main__":
 
 
     app.run(host="0.0.0.0", debug=True)
+
+
+  
+

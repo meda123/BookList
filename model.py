@@ -52,7 +52,7 @@ class Lista(db.Model):
 
 
 class List_Book(db.Model):
-    """Middle table connects lists table to books table"""
+    """Association table connects lists table to books table"""
 
 
     __tablename__ = "list_books"
@@ -95,10 +95,47 @@ class Book(db.Model):
         return m %(self.book_id, self.book_title, self.book_author, self.book_cover)
 
 
+class PL_Book(db.Model):
+    """ Association table connects public_list_books table to books table."""
+
+    __tablename__ = "pl_books"
+
+    pl_book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
+    pl_id = db.Column(db.Integer,db.ForeignKey('public_lists.pl_id'))
+    order = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        m = "<PL_Book pl_book_id=%s book_id=%s pl_id=%s order=%s >"
+        return m %(self.pl_book_id, self.book_id, self.pl_id, self.order)
+
+
+    #define relationships to Book 
+    book = db.relationship("Book", backref=db.backref("pl_books",order_by=pl_book_id))
+
+     #define relationships to Public_List
+    public_list = db.relationship("Public_List", backref=db.backref("public_lists",order_by=pl_book_id))
+
+
+
+class Public_List(db.Model):
+    """ Public list on the booklist app."""
+    __tablename__ = "public_lists"
+
+    pl_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    pl_name = db.Column(db.String(200),nullable=False)
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        m = "<Public_List pl_id=%s pl_name=%s >"
+        return m %(self.pl_id, self.pl_name)
+    
 
 #####################################################################
 # Helper functions
-
 def connect_to_db(app):
     """ Connect the database to my Flask app."""
 
@@ -116,3 +153,4 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
+
