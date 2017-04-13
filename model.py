@@ -103,7 +103,7 @@ class PL_Book(db.Model):
     pl_book_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'))
     pl_id = db.Column(db.Integer,db.ForeignKey('public_lists.pl_id'))
-    order = db.Column(db.Integer, nullable=False)
+    order = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         """Provide helpful representation when printed."""

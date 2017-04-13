@@ -3,7 +3,7 @@ import unicodedata
 from jinja2 import StrictUndefined 
 from flask import Flask, render_template, request, flash, redirect, session 
 from flask_debugtoolbar import DebugToolbarExtension 
-from model import connect_to_db, User, Lista, List_Book, Book, db
+from model import connect_to_db, User, Lista, List_Book, Book, PL_Book, Public_List, db
 import server_helper 
 
 app = Flask(__name__)
@@ -192,50 +192,6 @@ def view_results():
 
 
 #####################################################################
-
-# KEEPING THIS HERE: As I edit the /add_book route 
-
-# @app.route('/add_book', methods=['POST'])
-# def add_book():
-#     """ If user us logged in, allow them to add a book to a list."""
-#     user_id=session.get("user_id")
-
-#     if user_id:
-#         # Collect info from the API results (to check against books table)
-#         book_title = request.form.get("title")
-#         book_author = request.form.get("author")
-#         book_cover = request.form.get("cover")
-
-#         # Query to see if the combination of book & author exist in the books table
-#         title_author_query = Book.query.filter(Book.book_title==book_title, Book.book_author==book_author).all()
-#         list_name = request.form.get("list-name")
-#         list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
-
-#         # If book doesn't exist in books table, add to books table and to list
-#         if title_author_query == []:
-#             book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
-#             db.session.add(book_to_db)
-#             db.session.commit()
-
-#             # Collect info to add to the list_books table
-#             new_book_id = book_to_db.book_id
-#             book_to_listbook = List_Book(list_id=list_id, book_id=new_book_id)
-#             db.session.add(book_to_listbook)
-#             db.session.commit()
-
-#         else: 
-#             # Book exists in books table, so only add to list_books table 
-#             book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
-#             book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
-#             db.session.add(book_to_listbook)
-#             db.session.commit()
-
-#     else:
-#         new_book = None 
-
-#     flash("Book added to [add list name]")
-#     return redirect("/users/%s" %user_id)
-
 
 
 

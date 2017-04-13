@@ -11,7 +11,7 @@ gr_api_key = os.environ['goodreads_key']
 
 # Temporary connection to database to test helper functions 
 from flask import Flask, render_template, request, flash, redirect, session
-from model import connect_to_db, User, Lista, List_Book, Book, db
+from model import connect_to_db, User, Lista, List_Book, Book, PL_Book, Public_List, db
 app = Flask(__name__)
 
 if __name__ == "__main__":
@@ -57,6 +57,7 @@ def check_books(book_title, book_author):
         return True  
         
 def add_to_books_table(book_title, book_author, book_cover):
+        """ This function adds a new book to the books table"""
 
     book_to_db = Book(book_title=book_title, book_author=book_author, book_cover=book_cover)
     db.session.add(book_to_db)
@@ -65,9 +66,56 @@ def add_to_books_table(book_title, book_author, book_cover):
 
 
 def add_to_list_book(list_id, book_id):
+    """ This function adds an entry to the associative table between the books 
+    table and the lists table."""
+
     book_to_listbook = List_Book(list_id=list_id, book_id=book_id)
     db.session.add(book_to_listbook)
     db.session.commit()
+
+
+def check_public_list(list_name):
+    """ This function ensures we do not add the same scraped list title to 
+    the public_lists table."""
+
+    public_list_query = Public_List.query.filter(Public_List.pl_name==list_name).all()
+    print public_list_query
+
+    if public_list_query == []:
+        print "Public list not there, add it to DB"
+        return False 
+    else:
+        print "Yep, public list is in DB"
+        return True 
+
+
+def add_to_public_list(list_name):
+        """ This function adds a new public list to the public_lists table."""
+
+    list_to_public_list = Public_List(pl_name=list_name)
+    db.session.add(list_to_public_list)
+    db.session.commit()
+
+
+def add_to_pl_book(book_id, pl_id, order):
+        """ This function adds an entry to pl_books table, the association 
+        table between the books table and the public_lists table."""
+
+    new_pl_book = PL_Book(book_id=book_id, pl_id=pl_id, order=order)
+    db.session.add(new_pl_book)
+    db.session.commit()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
