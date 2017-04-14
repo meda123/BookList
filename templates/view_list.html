@@ -1,18 +1,12 @@
-<!doctype html> 
-<html>
-
-<head>
-    {% extends 'base.html' %} | Results page | {% block content %}
-    <meta charset="utf-8">
-    <title>sortable demo</title>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</head>
+{% extends 'base.html' %} | Results page | 
 
 
-<body>
+{% block title %} List {% endblock %}
 
+   
+{% block page_specific_js %}  <script src="static/view_list.js" ></script> {% endblock %}
+{% block content %}
+   
 
 <h1> Here are the books for {{ list_name }} </h1>
 
@@ -25,13 +19,12 @@
 </ul>
 </div>
 
+<br> <br> <br>
+<h1> Some curated lists you might want to check out ;) </h1>
 
-<script>$("#sortable").sortable();</script>
 
-
-</body>
 {% endblock %}
-</html>
+
 
 
 

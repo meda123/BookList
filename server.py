@@ -191,6 +191,11 @@ def view_results():
 
 
 
+@app.route('/typeahead', methods=["GET"])
+def typeahead_results():
+    return render_template("typeahead_test.html")
+
+
 #####################################################################
 
 

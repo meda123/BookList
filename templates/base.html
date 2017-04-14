@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Booklist</title>
+    <title> {% block title %} Booklist {% endblock %} </title>
       <link rel="stylesheet"
         href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
+
+{% block page_specific_js %} {% endblock %}
 </head>
 <body>
 

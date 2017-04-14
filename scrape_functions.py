@@ -7,7 +7,7 @@ from model import connect_to_db, User, Lista, List_Book, Book, db
 # imports so that I can add to my database 
 import server_helper 
 
-# Temporary connection to database to test helper functions 
+# Temporary connection to database to test functions below
 from flask import Flask, render_template, request, flash, redirect, session
 from model import connect_to_db, User, Lista, List_Book, Book, PL_Book, Public_List, db
 app = Flask(__name__)
@@ -88,14 +88,18 @@ def scrape_to_db(scrape_result):
                 add_pl_table = server_helper.add_to_pl_book(new_book_id, pl_id, book_order)
     
 
-# CALL scrape_list and pass list url to scrape the list 
-# scrape_result = scrape_list("https://www.goodreads.com/list/show/13601.Goodreads_Filipino_Group_Favorite_Mystery_Thriller_Books")
+# # Call scrape_list and pass list url to scrape list 
+# scrape_result = scrape_list(" ")
+
+# # Call scrape_to_db once you want to add scrape results to database 
 # scrape_to_db(scrape_result)
-# print "Added to DB -- now check lol"
 
              
+#Lists scraped as of April 13, 2017 
+# https://www.goodreads.com/list/best_of_year/2016
+# https://www.goodreads.com/list/best_of_year/2015
+# https://www.goodreads.com/list/best_of_year/2006
 
-         
 
 
 
