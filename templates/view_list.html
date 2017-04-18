@@ -2,19 +2,23 @@
 
 
 {% block title %} List {% endblock %}
-
    
-{% block page_specific_js %}  <script src="static/view_list.js" ></script> {% endblock %}
+{% block page_specific_js %}  <script src="/static/view_list.js"></script> {% endblock %}
+
 {% block content %}
    
-
 <h1> Here are the books for {{ list_name }} </h1>
+
 
 
 <div>
 <ul id="sortable">
 {% for list_book in all_books %}
-    <li> {{ list_book.book.book_title }} by {{ list_book.book.book_author }} </li>
+    <li> 
+    {{ list_book.book.book_title }} by {{ list_book.book.book_author }} <br>
+
+    Read: {{list_book.book_read}} 
+    </li>
 {% endfor %}
 </ul>
 </div>
@@ -30,3 +34,11 @@
 
 
 <!-- <img src= "{{ list_book.book.book_cover }}">  Shows pics -->
+
+<!-- CODE TO IMPLEMENT CHECK BOX-->
+
+<!-- if ($("#yourCheckboxID").is(":checked")) {  
+    // checkbox is checked 
+} else {
+    // checkbox is not checked 
+} -->

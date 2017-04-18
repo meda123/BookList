@@ -44,6 +44,7 @@ def query_gr(user_query):
 
     return result
 
+
 def check_books(book_title, book_author):
     """ This function receives title and author to check given book already 
     exists in the books table, if book is NOT in books table, it is added."""
@@ -79,7 +80,6 @@ def check_public_list(list_name):
     the public_lists table."""
 
     public_list_query = Public_List.query.filter(Public_List.pl_name==list_name).all()
-    print public_list_query
 
     if public_list_query == []:
         print "Public list not there, add it to DB"

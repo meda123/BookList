@@ -1,7 +1,7 @@
 """ Booklist App """
 import unicodedata
 from jinja2 import StrictUndefined 
-from flask import Flask, render_template, request, flash, redirect, session 
+from flask import Flask, render_template, request, flash, redirect, session, jsonify, url_for 
 from flask_debugtoolbar import DebugToolbarExtension 
 from model import connect_to_db, User, Lista, List_Book, Book, PL_Book, Public_List, db
 import server_helper 
@@ -21,7 +21,7 @@ app.jinja_env.auto_reload = True
 
 @app.route('/')
 def home():
-    """ Homepage - where user is asked to login or sing-up. """
+    """ Homepage - where user is asked to login or sign-up. """
 
     return render_template("homepage.html")
 
@@ -95,8 +95,65 @@ def user_details(user_id):
 
     user = User.query.get(user_id)
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
-     
+
+    #Handle back-end so if not in DB, send to goodreads  
     return render_template("user.html", user=user, user_lists=user_lists)
+
+
+@app.route('/results', methods=['POST'])
+def process_book_in_list():
+    """ Handles logic once a user adds a book to their list."""
+
+    user_input = request.form.get('user_input')
+    list_name = request.form.get('list-name')
+    key_words = user_input.split(" | ")
+
+    try: 
+        #Go ahead and process title & author   
+        title = key_words[0]
+        author = key_words[1]
+
+        # Check DB for book & author 
+        book_in_db = server_helper.check_books(title, author)
+        if book_in_db:
+            print "Book in DB! -- write logic to add me"
+        else: 
+            print "Time to use Goodreads"
+            search_result = server_helper.query_gr("%s" % user_input)
+            print search_result
+            return search_result
+            # return render_template("results.html", user_input=user_input, search_result=search_result)
+    except IndexError: 
+        return redirect(url_for('view_gr_results', search_box=user_input))
+
+
+        #This is a keyword search, also send user_input to Goodreads GR 
+        print "cool, now let's go to Goodreads"
+        # return render_template("results.html", user_input=user_input)
+        # gr_query = server_helper.query_gr(user_input)
+        # print gr_query
+
+
+    # search_result = server_helper.query_gr("%s" % user_search)
+
+    # user_id=session.get("user_id")
+    # user_lists = Lista.query.filter(Lista.user_id == user_id).all()
+
+    # return "not working." 
+
+
+@app.route('/gr_results', methods=["GET"])
+def view_gr_results():
+    """ Allows user to search books to add them to a list of their choice."""
+
+    user_search = request.args.get("search_box")
+    search_result = server_helper.query_gr("%s" % user_search)
+
+    user_id=session.get("user_id")
+    user_lists = Lista.query.filter(Lista.user_id == user_id).all()
+
+    return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
+
 
 
 @app.route('/add_list', methods=['POST'])
@@ -141,7 +198,6 @@ def list_details(list_id):
     all_books = List_Book.query.filter(List_Book.list_id=='{}'.format(list_id)).all()
     print all_books
 
-
     return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books)
 
 
@@ -177,17 +233,17 @@ def add_book():
     return redirect("/users/%s" %user_id)
 
 
-@app.route('/results', methods=["POST"])
-def view_results():
-    """ Allows user to search books to add them to a list of their choice."""
+# @app.route('/results', methods=["POST"])
+# def view_results():
+#     """ Allows user to search books to add them to a list of their choice."""
 
-    user_search = request.form.get("search_box")
-    search_result = server_helper.query_gr("%s" % user_search)
+#     user_search = request.form.get("search_box")
+#     search_result = server_helper.query_gr("%s" % user_search)
 
-    user_id=session.get("user_id")
-    user_lists = Lista.query.filter(Lista.user_id == user_id).all()
+#     user_id=session.get("user_id")
+#     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
-    return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
+#     return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
 
 
 
@@ -195,6 +251,58 @@ def view_results():
 def typeahead_results():
     return render_template("typeahead_test.html")
 
+
+@app.route('/typeahead-data.json')
+def typeahead_data():
+
+    books = Book.query.all()
+    data = []
+    for book in books:
+        title = book.book_title.strip('\n')
+        author = book.book_author
+        input = title + " | " + author
+        data.append(input)
+        # data.add(book.book_author)
+
+
+    return jsonify(data) 
+
+
+
+# @app.route("/ind_books")
+# def all_books():
+#       books = Book.query.all()
+#         return jsonify(map(lambda book: {
+#         'id': book.book_id,
+#         'title': book.book_title.strip('\n'),
+#         'author': book.book_author
+#         }, books))
+
+    # books_dict = map(lambda x: x.as_dict(), books)
+    # return json.dumps(books_dict)
+
+@app.route("/ind_book/<int:book_id>")
+def ind_books(book_id):
+
+    # show_title = Book.query.filter(Book.book_id == book_id).first().book_title
+    # show_author = Book.query.filter(Book.book_id == book_id).first().book_author
+    book = Book.query.filter(Book.book_id == book_id).first()
+    return render_template ("ind_books.html", book_id=book_id,show_title=book.book_title, show_author=book.book_author)
+
+
+
+
+
+
+# @app.route('all_books', methods=["GET"])
+# def all_books():
+#     """View all books."""
+
+#     book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
+#     title = book_id.book_title 
+#     author = book_id.book_author 
+
+#     return render_template("all_books_db.html")
 
 #####################################################################
 

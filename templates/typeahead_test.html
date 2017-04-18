@@ -6,6 +6,7 @@
 <script src="/static/typeahead.jquery.js"> </script>
 <!-- <script src="static/typeahead.js"></script> -->
 <script src="static/typeahead_test.js" > </script> 
+<script src="static/typeahead.js/bloodhound.js"></script>
 
 
 {% endblock %}
@@ -13,13 +14,39 @@
 
 {% block content %}
 
-<form id="form-country_v1" name="form-country_v1">
+<!-- <div id="book-search">
+    <input class="searchfield" type="text" placeholder="Book Search">
+</div> -->
+
+
+<form id="search-form" action="/search" method="POST" class="form-inline">
+        <div class="typeahead__container">
+        <div class="typeahead__field">
+        <span class="typeahead__query">
+          <input class="js-typeahead"
+                 id="input-from"
+                 name="depart"
+                 type="search"
+                 autocomplete="off"
+                 placeholder="From">
+        </span>
+        </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- STATUS: Monday April 17, 5:15 PM NOT working  -->
+
+<!-- <form id="form-country_v1" name="form-country_v1">
     <div class="typeahead__container">
         <div class="typeahead__field">
  
             <span class="typeahead__query">
-                <input class="js-typeahead-country_v1" name="country_v1[query]" type="search" placeholder="Search" autocomplete="off">
-            </span>
+                <input class="searchfield" name="searchfield" type="search" placeholder="Book Search" autocomplete="off"> -->
+                <!-- <input class="js-typeahead-country_v1" 
+                name="country_v1[query]" type="search" placeholder="Search" autocomplete="off"> -->
+  <!--           </span>
             <span class="typeahead__button">
                 <button type="submit">
                     <i class="typeahead__search-icon"></i>
@@ -28,6 +55,8 @@
  
         </div>
     </div>
-</form>
+</form> -->
+
+
 
 {% endblock %}

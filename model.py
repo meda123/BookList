@@ -88,6 +88,9 @@ class Book(db.Model):
     book_author_2 = db.Column(db.String(200), nullable=True)
     book_cover = db.Column(db.String(300), nullable=True)
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -136,11 +139,11 @@ class Public_List(db.Model):
 
 #####################################################################
 # Helper functions
-def connect_to_db(app):
+def connect_to_db(app, dburi='postgresql:///booklist'):
     """ Connect the database to my Flask app."""
 
     #Configure to use PostgreSQL database   
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///booklist'
+    app.config['SQLALCHEMY_DATABASE_URI'] = dburi
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
