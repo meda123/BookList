@@ -21,17 +21,18 @@
     <div class="typeahead__container">
         <div class="typeahead__field">
         <span class="typeahead__query">
-          <input class="js-typeahead"
+        <input class="js-typeahead"
                  id="input-from"
                  name="user_input"
                  type="search"
                  autocomplete="off"
                  placeholder="Type a book title">
         </span>
-        </div>
-        </div>
+      </div>
+    </div>
 
-        <div>
+
+    <div>
         <label for="list-name"> Your lists </label>
         <select id="list-select" name="list-name" class="list-name">
 
@@ -40,11 +41,11 @@
                 </option>
             {% endfor %}
         </select> 
-        <div> 
+        </div> 
         <input type="submit" class="btn btn-primary">
 </form>  
 
-
+<!-- ***** ABOVE HANDLES TYPEAHEAD user_input & list-name ***** -->
 
 
 <br>
@@ -61,10 +62,12 @@
 
 </form>
 
+<!-- ***** ABOVE HANDLES CREATING NEW LIST with new list_name ***** -->
+
+
 
 <br> <br> 
 <form id = "view-list-form" action = "/view_list" method="POST">
-
     <label for="list-name"> View your lists </label>
     <select id="list-select" name="list-name" class="list-name">
 
@@ -76,11 +79,15 @@
     <input type="submit" class="btn btn-primary">
 </form> 
 
+
 <script>
     $('view-list-form').on('change', function(evt) {
         var selectedList = $(evt.currentTarget).find('option:select').data();
     });
 </script>
+
+<!-- ***** ABOVE HANDLES VIEWING lists with list_name & user_id ***** -->
+
 
 
 <br> <br> <br> 

@@ -91,21 +91,25 @@ def logout():
 
 @app.route("/users/<int:user_id>")
 def user_details(user_id):
-    """ Show info about user, displays reading lists, and add book button."""
+    """ Show info about user, displays reading lists, add book button and suggestions."""
 
     user = User.query.get(user_id)
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
-    #Handle back-end so if not in DB, send to goodreads  
+
+  
     return render_template("user.html", user=user, user_lists=user_lists)
 
 
 @app.route('/results', methods=['POST'])
 def process_book_in_list():
-    """ Handles logic once a user adds a book to their list."""
+    """ Handles logic if book is found in the database, otherwise redirect to goodreads route."""
+
+    user_id=session.get("user_id")
 
     user_input = request.form.get('user_input')
     list_name = request.form.get('list-name')
+    print list_name
     key_words = user_input.split(" | ")
 
     try: 
@@ -113,45 +117,34 @@ def process_book_in_list():
         title = key_words[0]
         author = key_words[1]
 
-        # Check DB for book & author 
         book_in_db = server_helper.check_books(title, author)
+
         if book_in_db:
-            print "Book in DB! -- write logic to add me"
+            list_id = Lista.query.filter(Lista.list_name == '{}'.format(list_name)).first().list_id
+            book_id = Book.query.filter(Book.book_title == '{}'.format(title)).first().book_id
+            server_helper.add_to_list_book(list_id, book_id)
+            return redirect("/users/%s" %user_id)
+
         else: 
             print "Time to use Goodreads"
-            search_result = server_helper.query_gr("%s" % user_input)
-            print search_result
-            return search_result
-            # return render_template("results.html", user_input=user_input, search_result=search_result)
+            return redirect(url_for('view_gr_results', search_box=user_input))
+
     except IndexError: 
         return redirect(url_for('view_gr_results', search_box=user_input))
 
-
-        #This is a keyword search, also send user_input to Goodreads GR 
-        print "cool, now let's go to Goodreads"
-        # return render_template("results.html", user_input=user_input)
-        # gr_query = server_helper.query_gr(user_input)
-        # print gr_query
-
-
-    # search_result = server_helper.query_gr("%s" % user_search)
-
-    # user_id=session.get("user_id")
-    # user_lists = Lista.query.filter(Lista.user_id == user_id).all()
-
-    # return "not working." 
 
 
 @app.route('/gr_results', methods=["GET"])
 def view_gr_results():
     """ Allows user to search books to add them to a list of their choice."""
 
+    user_id=session.get("user_id")
+    
     user_search = request.args.get("search_box")
     search_result = server_helper.query_gr("%s" % user_search)
-
-    user_id=session.get("user_id")
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
+    # All the info below, goes to the add_book link :) 
     return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
 
 
@@ -184,6 +177,13 @@ def select_list():
     user_id = session.get("user_id") 
     list_name = request.form["list-name"] 
     list_id = Lista.query.filter_by(list_name=list_name).first().list_id
+
+        # Notes of lists suggestion
+    #in the user's lists (use that to query the public lists with like)
+    # If there's a public list that matched that title, grab that publiclist 
+    # If not, get NYT best seller or generics 
+    #  Use that publiclist to query all the books 
+        # Do a jinja for loop to display top 5 books in that public list  
     
     return redirect("/view_list/%s" % list_id)
 
@@ -233,76 +233,32 @@ def add_book():
     return redirect("/users/%s" %user_id)
 
 
-# @app.route('/results', methods=["POST"])
-# def view_results():
-#     """ Allows user to search books to add them to a list of their choice."""
-
-#     user_search = request.form.get("search_box")
-#     search_result = server_helper.query_gr("%s" % user_search)
-
-#     user_id=session.get("user_id")
-#     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
-
-#     return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
-
-
-
-@app.route('/typeahead', methods=["GET"])
-def typeahead_results():
-    return render_template("typeahead_test.html")
-
-
 @app.route('/typeahead-data.json')
 def typeahead_data():
+    """ Allows us to view jsonified data, includes ALL books in the books table."""
 
     books = Book.query.all()
     data = []
     for book in books:
-        title = book.book_title.strip('\n')
+        title = book.book_title
+        # title = book.book_title.strip('\n')
         author = book.book_author
         input = title + " | " + author
         data.append(input)
         # data.add(book.book_author)
 
-
     return jsonify(data) 
 
 
-
-# @app.route("/ind_books")
-# def all_books():
-#       books = Book.query.all()
-#         return jsonify(map(lambda book: {
-#         'id': book.book_id,
-#         'title': book.book_title.strip('\n'),
-#         'author': book.book_author
-#         }, books))
-
-    # books_dict = map(lambda x: x.as_dict(), books)
-    # return json.dumps(books_dict)
-
 @app.route("/ind_book/<int:book_id>")
-def ind_books(book_id):
+def view_ind_books(book_id):
+    """ WIP - ideally, view an individual book and it's details."""
 
     # show_title = Book.query.filter(Book.book_id == book_id).first().book_title
     # show_author = Book.query.filter(Book.book_id == book_id).first().book_author
     book = Book.query.filter(Book.book_id == book_id).first()
     return render_template ("ind_books.html", book_id=book_id,show_title=book.book_title, show_author=book.book_author)
 
-
-
-
-
-
-# @app.route('all_books', methods=["GET"])
-# def all_books():
-#     """View all books."""
-
-#     book_id = Book.query.filter(Book.book_title == '{}'.format(book_title)).first().book_id
-#     title = book_id.book_title 
-#     author = book_id.book_author 
-
-#     return render_template("all_books_db.html")
 
 #####################################################################
 
