@@ -103,13 +103,12 @@ def user_details(user_id):
 
 @app.route('/results', methods=['POST'])
 def process_book_in_list():
-    """ Handles logic if book is found in the database, otherwise redirect to goodreads route."""
+    """ Handles logic if book is found in the database, otherwise redirect to gr_results route."""
 
     user_id=session.get("user_id")
 
     user_input = request.form.get('user_input')
     list_name = request.form.get('list-name')
-    print list_name
     key_words = user_input.split(" | ")
 
     try: 
@@ -126,7 +125,6 @@ def process_book_in_list():
             return redirect("/users/%s" %user_id)
 
         else: 
-            print "Time to use Goodreads"
             return redirect(url_for('view_gr_results', search_box=user_input))
 
     except IndexError: 
@@ -136,7 +134,7 @@ def process_book_in_list():
 
 @app.route('/gr_results', methods=["GET"])
 def view_gr_results():
-    """ Allows user to search books to add them to a list of their choice."""
+    """ Query the goodreads API with the user_search key words."""
 
     user_id=session.get("user_id")
     
@@ -144,9 +142,7 @@ def view_gr_results():
     search_result = server_helper.query_gr("%s" % user_search)
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
-    # All the info below, goes to the add_book link :) 
     return render_template("results.html", user_search=user_search, search_result=search_result, user_lists=user_lists)
-
 
 
 @app.route('/add_list', methods=['POST'])
@@ -178,12 +174,6 @@ def select_list():
     list_name = request.form["list-name"] 
     list_id = Lista.query.filter_by(list_name=list_name).first().list_id
 
-        # Notes of lists suggestion
-    #in the user's lists (use that to query the public lists with like)
-    # If there's a public list that matched that title, grab that publiclist 
-    # If not, get NYT best seller or generics 
-    #  Use that publiclist to query all the books 
-        # Do a jinja for loop to display top 5 books in that public list  
     
     return redirect("/view_list/%s" % list_id)
 
@@ -194,11 +184,49 @@ def list_details(list_id):
 
     user_id = session.get("user_id")
     list_name = Lista.query.get(list_id).list_name
-
     all_books = List_Book.query.filter(List_Book.list_id=='{}'.format(list_id)).all()
-    print all_books
 
-    return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books)
+    first_word= server_helper.list_parts(list_name).encode('utf-8')
+
+    public_lists = Public_List.query.filter(Public_List.pl_name.like('%{}%'.format(first_word))).first()
+    # print public_lists
+
+    # ADDITIONAL: If first word returns none, try second word
+
+    if public_lists:
+        #Found public list, display the top 5 books from that public list
+        print "cool! Super customized"
+
+        #Based on public_id, generate all books associated with that pl_id 
+        pl_id = public_lists.pl_id
+
+
+        # all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).first().book_id
+        all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).all()
+        print all_plbooks
+
+        bc_list = []
+        for item in all_plbooks:
+            identifier = item.book_id
+            book_cover = Book.query.filter(Book.book_id==identifier).first().book_cover
+            bc_list.append(book_cover)
+        print bc_list
+
+    else: 
+        #Display the "best of 2016 top 5 books"
+        print "default to best of 2016"
+
+
+    # Notes of lists suggestion
+    # If there's a public list that matched that title, grab that publiclist 
+    # If not, get NYT best seller or generics 
+    #  Use that publiclist to query all the books 
+        # Do a jinja for loop to display top 5 books in that public list  
+
+
+    # public_lists = Public_List.query.filter_by(pl_name.like('%{}%'.format(first_word))).first()
+
+    return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books, bc_list=bc_list)
 
 
 @app.route('/add_book', methods=['POST'])

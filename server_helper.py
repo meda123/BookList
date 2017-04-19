@@ -107,6 +107,15 @@ def add_to_pl_book(book_id, pl_id, order):
 
 
 
+def list_parts(list_name):
+    """Makes a list out of strings inside a user's list, returns the first word"""
+
+    segments = list_name.split(" ")
+    return segments[0]
+
+
+
+
 
 
 

@@ -26,8 +26,12 @@
 <br> <br> <br>
 <h1> Some curated lists you might want to check out ;) </h1>
 
+{% for i in range(0,6) %}
+    <img src="{{ bc_list[i] }}" height="100"><br>
+{% endfor %}
 
 {% endblock %}
+
 
 
 
@@ -42,3 +46,5 @@
 } else {
     // checkbox is not checked 
 } -->
+
+
