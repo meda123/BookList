@@ -9,22 +9,27 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- ######################  Books inside that reading list ########################## -->
    
 <h1> Here are the books for {{ list_name }} </h1>
 
-
-
 <div>
-<ul id="sortable">
-{% for list_book in all_books %}
-    <li> 
-    {{ list_book.book.book_title }} by {{ list_book.book.book_author }} <br>
+    <ul id="sortable">
+    {% for list_book in all_books %}
+        <li> 
+        {{ list_book.book.book_title }} by {{ list_book.book.book_author }} <br>
 
-    Read: {{list_book.book_read}} 
-    </li>
-{% endfor %}
-</ul>
+        <input type=checkbox class='bookRead' data-book_id={{list_book.list_book_id}} { if list_book.book_read}checked{/if}>Read: {{list_book.book_read}} 
+        </li>
+    {% endfor %}
+    </ul>
 </div>
+
+
+
+<!-- #########################  List Suggestions  ############################ -->
+
 
 <br> <br> <br>
 <h1> Based on {{ list_name }} , you might want to check out: </h1>
@@ -38,7 +43,7 @@
       <h2> {{ pl_list.pl_name }} <br> </h2>
 
 <div id="show-top5">
- {% for book in pl_list.public_lists[0:5] %}
+ {% for book in pl_list.public_lists[0:3] %}
       {{book.book.book_title}} by {{book.book.book_author}} <br> 
             <img src="{{ book.book.book_cover }}"> <br> 
       
@@ -47,40 +52,13 @@
 </div>
 
 <div id = "rest-of-books">
-      {% for book in pl_list.public_lists[5:] %}
+      {% for book in pl_list.public_lists[3:] %}
       {{book.book.book_title}} by {{book.book.book_author}} <br> 
             <img src="{{ book.book.book_cover }}"> <br> 
       
       {%endfor%}
     {% endfor %}
 </div>
-
-
- <!-- Code below allows for show/hide toggle  -->
-<script>
-
-$("#rest-of-books").hide();
-
-$(document).ready(function(){
-    $("#hide").click(function(){
-        $("#rest-of-books").hide();
-    });
-    $("#show").click(function(){
-        $("#rest-of-books").show();
-    });
-});
-</script>
-
-
-
-
-<!-- CODE TO IMPLEMENT CHECK BOX-->
-
-<!-- if ($("#yourCheckboxID").is(":checked")) {  
-    // checkbox is checked 
-} else {
-    // checkbox is not checked 
-} -->
 
 
 

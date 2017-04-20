@@ -199,31 +199,21 @@ def list_details(list_id):
     for ind_obj in results:
         all_objs.append(ind_obj)
 
-
-    # books_in_objs = []
-    # for obj in all_objs:
-    #     pl_id = obj.pl_id
-    #     all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).all()
-    #     books_in_objs.append(all_plbooks)
-    # print "this is books_in_obs", books_in_objs
-        
-    # each_book = []
-    # for item in all_plbooks:
-    #     identifier = item.book_id
-    #     book_details = Book.query.filter(Book.book_id==identifier).first()
-    #     each_book.append(book_details)
-    # print "this is each book", each_book
-
-
-
     
     return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books, all_objs=all_objs)
 
 
 
+@app.route('/book_read', methods=['POST'])
+def book_read():
+    """Updates the database when someone checks a book read/unread."""
+
+    # You are getting id & read (T/F)
+
+    book_read_change = List_Book.query.filter(list_book_id == id)  
 
 
-    
+    return "success"    
 
 
 
