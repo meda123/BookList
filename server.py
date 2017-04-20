@@ -186,47 +186,50 @@ def list_details(list_id):
     list_name = Lista.query.get(list_id).list_name
     all_books = List_Book.query.filter(List_Book.list_id=='{}'.format(list_id)).all()
 
-    first_word= server_helper.list_parts(list_name).encode('utf-8')
+    all_words = [word.encode('utf-8') for word in server_helper.split_title(list_name)]
 
-    public_lists = Public_List.query.filter(Public_List.pl_name.like('%{}%'.format(first_word))).first()
-    # print public_lists
+    results = set()
+    for word in all_words:
+        result = Public_List.query.filter(Public_List.pl_name.like('%{}%'.format(word))).all()
+        for item in result:
+            results.add(item) 
 
-    # ADDITIONAL: If first word returns none, try second word
-
-    if public_lists:
-        #Found public list, display the top 5 books from that public list
-        print "cool! Super customized"
-
-        #Based on public_id, generate all books associated with that pl_id 
-        pl_id = public_lists.pl_id
-
-
-        # all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).first().book_id
-        all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).all()
-        print all_plbooks
-
-        bc_list = []
-        for item in all_plbooks:
-            identifier = item.book_id
-            book_cover = Book.query.filter(Book.book_id==identifier).first().book_cover
-            bc_list.append(book_cover)
-        print bc_list
-
-    else: 
-        #Display the "best of 2016 top 5 books"
-        print "default to best of 2016"
+    # all_objs in a list of each public_list object 
+    all_objs = []
+    for ind_obj in results:
+        all_objs.append(ind_obj)
 
 
-    # Notes of lists suggestion
-    # If there's a public list that matched that title, grab that publiclist 
-    # If not, get NYT best seller or generics 
-    #  Use that publiclist to query all the books 
-        # Do a jinja for loop to display top 5 books in that public list  
+    # books_in_objs = []
+    # for obj in all_objs:
+    #     pl_id = obj.pl_id
+    #     all_plbooks = PL_Book.query.filter(PL_Book.pl_id==pl_id).all()
+    #     books_in_objs.append(all_plbooks)
+    # print "this is books_in_obs", books_in_objs
+        
+    # each_book = []
+    # for item in all_plbooks:
+    #     identifier = item.book_id
+    #     book_details = Book.query.filter(Book.book_id==identifier).first()
+    #     each_book.append(book_details)
+    # print "this is each book", each_book
 
 
-    # public_lists = Public_List.query.filter_by(pl_name.like('%{}%'.format(first_word))).first()
 
-    return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books, bc_list=bc_list)
+    
+    return render_template("view_list.html", list_name=list_name, list_id=list_id, all_books=all_books, all_objs=all_objs)
+
+
+
+
+
+    
+
+
+
+  
+
+    
 
 
 @app.route('/add_book', methods=['POST'])

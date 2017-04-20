@@ -3,7 +3,10 @@
 
 {% block title %} List {% endblock %}
    
-{% block page_specific_js %}  <script src="/static/view_list.js"></script> {% endblock %}
+{% block page_specific_js %}  
+<script src="/static/view_list.js"></script> 
+<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"> </script>
+{% endblock %}
 
 {% block content %}
    
@@ -24,20 +27,52 @@
 </div>
 
 <br> <br> <br>
-<h1> Some curated lists you might want to check out ;) </h1>
+<h1> Based on {{ list_name }} , you might want to check out: </h1>
 
-{% for i in range(0,6) %}
-    <img src="{{ bc_list[i] }}" height="100"><br>
-{% endfor %}
+<p>If you click on the "Hide" button, I will disappear.</p>
 
-{% endblock %}
+<button id="hide">Show less</button>
+<button id="show">Show More</button>
+
+    {% for pl_list in all_objs %}
+      <h2> {{ pl_list.pl_name }} <br> </h2>
+
+<div id="show-top5">
+ {% for book in pl_list.public_lists[0:5] %}
+      {{book.book.book_title}} by {{book.book.book_author}} <br> 
+            <img src="{{ book.book.book_cover }}"> <br> 
+      
+      {%endfor%}
+
+</div>
+
+<div id = "rest-of-books">
+      {% for book in pl_list.public_lists[5:] %}
+      {{book.book.book_title}} by {{book.book.book_author}} <br> 
+            <img src="{{ book.book.book_cover }}"> <br> 
+      
+      {%endfor%}
+    {% endfor %}
+</div>
+
+
+ <!-- Code below allows for show/hide toggle  -->
+<script>
+
+$("#rest-of-books").hide();
+
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("#rest-of-books").hide();
+    });
+    $("#show").click(function(){
+        $("#rest-of-books").show();
+    });
+});
+</script>
 
 
 
-
-
-
-<!-- <img src= "{{ list_book.book.book_cover }}">  Shows pics -->
 
 <!-- CODE TO IMPLEMENT CHECK BOX-->
 
@@ -46,5 +81,11 @@
 } else {
     // checkbox is not checked 
 } -->
+
+
+
+{% endblock %}
+
+
 
 

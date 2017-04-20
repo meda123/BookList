@@ -89,33 +89,34 @@ def scrape_to_db(scrape_result):
                 add_pl_table = server_helper.add_to_pl_book(new_book_id, pl_id, book_order)
     
 
-# # Call scrape_list and pass list url to scrape list 
-# scrape_result = scrape_list(" ")
-# print scrape_result
+# Call scrape_list and pass list url to scrape list 
+scrape_result = scrape_list("https://www.goodreads.com/list/show/735.Must_Read_Non_Fiction")
+print scrape_result
 
-# # Call scrape_to_db once you want to add scrape results to database 
-# scrape_to_db(scrape_result)
-# print "added to db"
+# Call scrape_to_db once you want to add scrape results to database 
+scrape_to_db(scrape_result)
+print "added to db"
 
              
-#Lists to scrape as of 4/18/17 
-# https://www.goodreads.com/list/best_of_year/2016 (just this one so far)
-# https://www.goodreads.com/list/best_of_year/2015
-# https://www.goodreads.com/list/best_of_year/2014
-# https://www.goodreads.com/list/best_of_year/2013 
-# https://www.goodreads.com/list/best_of_year/2012
-# https://www.goodreads.com/list/best_of_year/2006
-# https://www.goodreads.com/list/show/550.Best_Love_Stories_
-# https://www.goodreads.com/list/show/57.Best_Ever_Contemporary_Romance_Books
-# https://www.goodreads.com/list/show/15.Best_Historical_Fiction
-# https://www.goodreads.com/list/show/43.Best_Young_Adult_Books
-# https://www.goodreads.com/list/show/3.Best_Science_Fiction_Fantasy_Books
-# https://www.goodreads.com/list/show/11.Best_Crime_Mystery_Books
-# https://www.goodreads.com/list/show/135.Best_Horror_Novels
-# https://www.goodreads.com/list/show/281.Best_Memoir_Biography_Autobiography
-# https://www.goodreads.com/list/show/29013.Best_Biographies
-# https://www.goodreads.com/list/show/8306.Thrillers_You_Must_Read_
-# https://www.goodreads.com/list/show/633.Favourite_Travel_Books
+#Lists scraped as of 4/19/17 
+# https://www.goodreads.com/list/best_of_year/2016 *
+# https://www.goodreads.com/list/best_of_year/2015 *
+# https://www.goodreads.com/list/best_of_year/2014 *
+# https://www.goodreads.com/list/best_of_year/2013 *
+# https://www.goodreads.com/list/best_of_year/2012 *
+# https://www.goodreads.com/list/best_of_year/2006 *
+# https://www.goodreads.com/list/show/550.Best_Love_Stories_ *
+# https://www.goodreads.com/list/show/57.Best_Ever_Contemporary_Romance_Books * 
+# https://www.goodreads.com/list/show/15.Best_Historical_Fiction * 
+# https://www.goodreads.com/list/show/43.Best_Young_Adult_Books *
+# https://www.goodreads.com/list/show/3.Best_Science_Fiction_Fantasy_Books * (eww) 
+# https://www.goodreads.com/list/show/11.Best_Crime_Mystery_Books * (eww)
+# https://www.goodreads.com/list/show/135.Best_Horror_Novels * 
+# https://www.goodreads.com/list/show/281.Best_Memoir_Biography_Autobiography * 
+# https://www.goodreads.com/list/show/29013.Best_Biographies * 
+# https://www.goodreads.com/list/show/8306.Thrillers_You_Must_Read_ *
+# https://www.goodreads.com/list/show/633.Favourite_Travel_Books *
+# https://www.goodreads.com/list/show/735.Must_Read_Non_Fiction *
 
 
 
