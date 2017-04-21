@@ -208,16 +208,29 @@ def list_details(list_id):
 def book_read():
     """Updates the database when someone checks a book read/unread."""
 
+    book_id = int(request.form.get('id').encode('utf-8'))
+    print book_id
+    print type(book_id)
+    read = request.form.get('read') == "true"
+    print read 
+
+    #get list book obj out of DB
+
+
+    #
+ 
+    # list_book_obj.book_read = read
+    # db.session.commit()
+
+
     # You are getting id & read (T/F)
 
-    book_read_change = List_Book.query.filter(list_book_id == id)  
+    # book_read_change = List_Book.query.filter(list_book_id == id)   
+
+    return render_template("book_read.html")
 
 
-    return "success"    
 
-
-
-  
 
     
 
