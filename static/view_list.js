@@ -25,12 +25,7 @@ $(document).ready(function(){
         $("#hide-button-" + listId).show();
 
     });
-       
-
-
-    // Default checkox // 
-    
-       
+           
 
     // Manages Boolean values for read/unread check boxes 
     $('.bookRead').on('click', function() {
@@ -44,5 +39,3 @@ $(document).ready(function(){
 
     });
 });
-
-

@@ -5,13 +5,33 @@
      <!--  <link rel="stylesheet"> -->
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">  
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link href="/static/project.css" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <!-- <link href="/static/project.css" rel="stylesheet"> -->
+    <script>
+        
 
-    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        function doSortable(){
+            console.log('i');
+            debugger;
+            $("#sortable").sortable();
+        }
+    </script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+
+    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"> -->
+
+ 
+ <!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+   <!-- <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"> </script> -->
+  <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+  <!-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
+   <!--  <script src="https://code.jquery.com/jquery-3.2.1.js"></script> -->
+  
+  <!--   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    
+
+ 
 
 
 {% block page_specific_js %}{% endblock %}
@@ -34,7 +54,7 @@ BookList: Changing how you find your next read!
 {% endblock %}
 
   
-
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" onload="doSortable();"></script>
 </body>
 </html>
 
