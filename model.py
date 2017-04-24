@@ -39,7 +39,7 @@ class Lista(db.Model):
     list_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     list_name = db.Column(db.String(60), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
+   
     #define relationship to user
     user = db.relationship("User", backref=db.backref("lists",order_by=list_id))
 

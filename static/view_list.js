@@ -27,6 +27,11 @@ $(document).ready(function(){
     });
        
 
+
+    // Default checkox // 
+    
+       
+
     // Manages Boolean values for read/unread check boxes 
     $('.bookRead').on('click', function() {
         bookId = $(this).data('book_id');

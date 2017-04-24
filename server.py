@@ -42,7 +42,6 @@ def register_process():
     password = request.form["password"]
 
     new_user = User(name=name, last=last, email=email, password=password)
-
     db.session.add(new_user)
     db.session.commit()
 
@@ -97,8 +96,13 @@ def user_details(user_id):
     user_lists = Lista.query.filter(Lista.user_id == user_id).all()
 
 
-  
-    return render_template("user.html", user=user, user_lists=user_lists)
+    count = 0 
+    for ind_list in user_lists:
+        for book_item in ind_list.list_books:
+            if book_item.book_read:
+                count = count + 1
+     
+    return render_template("user.html", user=user, user_lists=user_lists, count=count)
 
 
 @app.route('/results', methods=['POST'])
@@ -208,31 +212,14 @@ def list_details(list_id):
 def book_read():
     """Updates the database when someone checks a book read/unread."""
 
-    book_id = int(request.form.get('id').encode('utf-8'))
-    print book_id
-    print type(book_id)
+    list_book_id = int(request.form.get('id').encode('utf-8'))
     read = request.form.get('read') == "true"
-    print read 
 
-    #get list book obj out of DB
+    update = List_Book.query.get(list_book_id)
+    update.book_read = read 
+    db.session.commit()
 
-
-    #
- 
-    # list_book_obj.book_read = read
-    # db.session.commit()
-
-
-    # You are getting id & read (T/F)
-
-    # book_read_change = List_Book.query.filter(list_book_id == id)   
-
-    return render_template("book_read.html")
-
-
-
-
-    
+    return render_template("book_read.html")  
 
 
 @app.route('/add_book', methods=['POST'])

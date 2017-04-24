@@ -26,7 +26,12 @@
         <li> 
          <img src="{{ list_book.book.book_cover }}" height="50">
         {{ list_book.book.book_title }} by {{ list_book.book.book_author }}
-        <input type=checkbox class='bookRead' data-book_id={{list_book.list_book_id}} { if list_book.book_read}checked{/if}> Finished: {{list_book.book_read}} 
+
+
+        <input type=checkbox class='bookRead' data-book_id={{list_book.list_book_id}} 
+        {% if list_book.book_read %}
+            checked
+        {% endif %}
         </li>
 
     {% endfor %}
