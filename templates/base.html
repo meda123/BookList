@@ -1,59 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title> {% block title %} Booklist {% endblock %} </title>
-     <!--  <link rel="stylesheet"> -->
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">  
-    <!-- <link href="/static/project.css" rel="stylesheet"> -->
-    <script>
+
+ <!-- ################################ HEAD ################################## -->
+
+<title> {% block title %} NextRead {% endblock %} </title> 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">  
+<link href="/static/main.css" rel="stylesheet">
+    
+  <!--   Leave script as is, do NOT change position  -->
+<script>
         
 
         function doSortable(){
-            console.log('i');
-            debugger;
+            // console.log('i');
+            // debugger;
             $("#sortable").sortable();
         }
-    </script>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
 
-    <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"> -->
-
- 
- <!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
-   <!-- <script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"> </script> -->
-  <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-  <!-- <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
-   <!--  <script src="https://code.jquery.com/jquery-3.2.1.js"></script> -->
-  
-  <!--   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
-    
-
- 
+<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
 
 
-{% block page_specific_js %}{% endblock %}
-</head>
-<body>
+{% block page_specific_js %} {% endblock %}
 
-BookList: Changing how you find your next read! 
+ <!-- ########################### NAVIGATION BAR ######################### -->
+ <body>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <nav class="navbar navbar-default" id = "nav-section">
+      <div class="container-fluid">
+        <div class="navbar-header"> 
+         <a class="navbar-brand" href="#"> NextRead </a>
+         <img alt = "NextRead logo" src = "/static/images/logo.png" height = 20 id="logo-nav">
+        </div>
 
 
-{% if "user_id" in session %}
-    <a href="/logout">Logout</a>
-{% else %}
-    <li> <a href="/login">Login</a> </li>
-    <li> <a href="/register_form"> New User? Register! </a> </li>
-{% endif %}
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
 
+            {% if "user_id" in session %}
+            <li> <a href="{{url_for('user_details', user_id=session.user_id)}}"> Books Dashboard</a> </li>
+             <li> <a href="/logout">Logout</a> </li>
+            {% else %}
+            <li> <a href="/login">Login</a> </li>
+            <li> <a href="/register_form"> Register! </a> </li>
+            {% endif %} 
+
+             <li><a href="">About</a></li>
+        </ul>
+      </div>
+    </nav>
+
+
+
+
+ <!-- ########################### BODY CONTENT ######################### -->
 
 {% block content %}
-    Here is your body content 
+    Here is your body content
+
 {% endblock %}
 
-  
+  <!--   Leave script as is, do NOT change position  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js" onload="doSortable();"></script>
 </body>
 </html>

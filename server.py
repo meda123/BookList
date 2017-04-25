@@ -170,13 +170,13 @@ def process_list():
 
 
 
-@app.route('/view_list', methods=['POST'])
+@app.route('/view_list', methods=['GET'])
 def select_list():
     """If user is logged in, allow them to select a list and collect the list name they select"""
     
     user_id = session.get("user_id") 
-    list_name = request.form["list-name"] 
-    list_id = Lista.query.filter_by(list_name=list_name).first().list_id
+    list_id = request.args["list-id"] 
+    # list_id = Lista.query.filter_by(list_id=list_name).first().list_id
 
     
     return redirect("/view_list/%s" % list_id)

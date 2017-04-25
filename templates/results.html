@@ -13,15 +13,16 @@
 
 {% block content %}
 
+<div class = "container-fluid all-columns">
+   <div class="row">
 
-Ideally: Set up form so that once you select a book
-<h1> Hmm... did you mean one of these books?</h1>
-<p> Here are some suggestions for {{user_search}} : </p> <br>
+<h1> Just double checking, which of these books did you mean?</h1>
+<h2> Here are some suggestions for {{user_search}} : </h2> <br>
 
 <form id="add-book-form" method="post" action="/add_book">
 
         <div class="form-group">
-        <label for="book-title">Results</label>
+        <label for="book-title"></label>
         <select id="book-select" name="book" class="form-control" id="book">
 
         {% for i in range(0,6) %}
@@ -42,7 +43,7 @@ Ideally: Set up form so that once you select a book
 
          <div>
         <label for="list-name"> Your lists </label>
-        <select id="list-select" name="list-name" class="list-name">
+        <select id="list-select" name="list-name" class="list-name color-salmon">
 
             {% for user_list in user_lists %}
                 <option value = "{{ user_list.list_name }}"> {{ user_list.list_name }}
@@ -51,7 +52,7 @@ Ideally: Set up form so that once you select a book
         </select> 
         </div>
 
-        <input type="submit" class="btn btn-primary"> 
+        <input type="submit" class="submit-button"> 
   </form>
 
 <!-- ### Form above sends to /add_book with title, author, cover, list_name ### -->
@@ -70,7 +71,8 @@ Ideally: Set up form so that once you select a book
 </script>
 
 <!-- ## Magical script helps us catch all three while only showing title & author ## -->
-
+</div>
+</div>
 
 {% endblock %}
 

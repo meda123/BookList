@@ -12,12 +12,16 @@
 
 {% block content %}
 
-<p> Welcome {{user.name}}! </p> <br>
+<div class = "container-fluid">
+<div class = "row">
 
+<!-- ##################### FIRST DIV / ADD BOOK W TYPEAHEAD ################### -->
+<div class="col-xs-4 dash-columns">
 
+<h2> Welcome {{user.name}}! </h2> <br>
 
 <form action = "/results" method="POST">
-    <label for = "search-input"> I'd like to add a book: </label>
+    <label for = "search-input"> Add a book to a reading list: </label>
 <!--     <input type = "text" name = "search_box" id = "search-input"> -->
     <div class="typeahead__container">
         <div class="typeahead__field">
@@ -35,7 +39,7 @@
 
     <div>
         <label for="list-name"> Your lists </label>
-        <select id="list-select" name="list-name" class="list-name">
+        <select id="list-select" name="list-name" class="list-name color-salmon">
 
             {% for user_list in user_lists %}
                 <option value = "{{ user_list.list_name }}"> {{ user_list.list_name }}
@@ -43,32 +47,81 @@
             {% endfor %}
         </select> 
         </div> 
-        <input type="submit" class="btn btn-primary">
-</form>  
-
-<!-- ***** ABOVE HANDLES TYPEAHEAD user_input & list-name ***** -->
-
-
-<br>
-<form action="/add_list" method="POST">
-
-    <div>
-        <label>
-            Type a list name
-            <input type="list_name" name="list_name">
-            <input type="submit" value="Make new list">
-        </label>
-
-    </div>
-
+        <input type="submit" class="submit-button">
+        <br> <br> <br> 
 </form>
 
-<!-- ***** ABOVE HANDLES CREATING NEW LIST with new list_name ***** -->
+
+<form action="/add_list" method="POST">
+    <div class="typeahead__container">
+        <label>
+            Type list name:
+            <input type="list_name" name="list_name" class = "color-salmon">
+            <p> <input type="submit" value="Make new list" class="submit-button">  <p>
+        </label>
+    </div>
+</form>
+
+
+<!-- Below closes column div  -->  
+</div>
 
 
 
-<br> <br> 
-<form id = "view-list-form" action = "/view_list" method="POST">
+<!-- ##################### YOUR READING PROGRESS ################### -->
+
+   <div class="col-xs-4 dash-columns">
+   <h2> Your Reading Progress </h2>
+
+        <blockquote>
+            <h2 class= "main-text-color" id="book-count"> Books Read: {{ count }} !</h2>
+            <img src = "/static/images/heart.jpg" height="100" class="pics rounded-circle" >
+            
+            <h4 class="quote-text"> “Once, in my father's bookshop, I heard a regular customer say that few things leave a deeper mark on a reader than the first book that finds its way into his heart. Those first images, the echo of words we think we have left behind, accompany us throughout our lives and sculpt a palace in our memory to which, sooner or later—no matter how many books we read, how many worlds we discover, or how much we learn or forget—we will return.” <br> <br>
+            ― Carlos Ruiz Zafón, The Shadow of the Wind </h4>
+            
+  
+     </blockquote>
+
+
+  
+
+<!-- Below closes column div -->   
+    </div>
+
+
+<!-- ##################### VIEW LISTS ################### -->
+
+<div class="col-xs-4 dash-columns">
+<h2> View Your Reading Lists </h2>
+
+<blockquote>
+
+<div class="list-group">
+    <a class="list-group-item color-salmon"> Select a list to view books: </a>
+    <form id = "view-list-form" action = "/view_list" method="GET">
+  <!--   <select id="list-select" name="list-name" class="list-name"> -->
+
+        {% for user_list in user_lists %}
+        <a href ="/view_list?list-id={{user_list.list_id}}" class="list-group-item" option value= "{{ user_list.list_name }}"> {{ user_list.list_name }}
+        </option> </a>
+        {% endfor %}
+
+        </form>
+
+
+</blockquote>
+</div>
+
+<!-- </div> -->
+<!-- 
+step1) How do I just make hrefs to each list? 
+step2) Allow them to select from here 
+ -->
+
+
+<!--  ##################### THIS IS WORKING #####################   -->
+<!-- <form id = "view-list-form" action = "/view_list" method="GET">
     <label for="list-name"> View your lists </label>
     <select id="list-select" name="list-name" class="list-name">
 
@@ -77,8 +130,8 @@
             </option>
         {% endfor %}
     </select> 
-    <input type="submit" class="btn btn-primary">
-</form> 
+    <input type="submit" class="submit-button">
+</form>  -->
 
 
 <script>
@@ -87,18 +140,15 @@
     });
 </script>
 
-<!-- ***** ABOVE HANDLES VIEWING lists with list_name & user_id ***** -->
-
-
-<!--  ############################## READ SO FAR ########################## -->
-
-<h1> So far you've read, keep going!! ::  </h1>
-<p> You have read: {{ count }} </p>
+<!-- Below closes column div  -->  
 
 
 
-
-
+<!--  ##################### END OF THREE SECTIONS #####################   -->
+<!--  Below closes row div -->
+    </div> 
+<!--  Below closes container fluid div -->
+<div>
 
 
 {% endblock %}
