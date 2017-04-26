@@ -16,11 +16,11 @@
 
   
 <!-- ######################  Books inside that reading list ########################## -->
- <div class="col-xs-7 all-columns">
-<h2> Here are the books for {{ list_name }} </h2>
+ <div class="col-xs-6 all-columns">
+<h2> Here are your books for {{ list_name }} </h2>
 
 <a href="http://0.0.0.0:5000/users/1">
-<img border="0" alt="W3Schools" src="/static/images/addbook.png" align="center" height="50" >
+<img border="0" class="add-book" src="/static/images/addbook.png" align="center" height="30" >
 </a>
 
 
@@ -46,9 +46,9 @@
 
 
 <!-- #########################  List Suggestions  ############################ -->
-<div class="col-xs-5 all-columns"> 
+<div class="col-xs-6 all-columns"> 
 
-<h2> Based on {{ list_name }}, check out: </h2>
+<h2> Based on {{ list_name }}, some curated lists you might like: </h2>
 
 
 {% for pl_list in all_objs %}
