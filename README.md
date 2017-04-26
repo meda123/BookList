@@ -18,6 +18,19 @@ Backend: Python, Flask, PostgreSQL, SQLAlchemy, Beautiful Soup
 Frontend: JavaScript, jQuery, AJAX, Jinja2, Bootstrap, HTML5, CSS3, Typeahead JS
 APIs: Goodreads 
 
+
+# Features
+
+## Homepage
+![alt text](static/images/homepage_rm.png)
+
+## Dashboard
+![alt text](static/images/Dashboard_rm.png)
+![alt text](static/images/typeahead_rm.png)
+
+## View Lists
+![alt text](static/images/list_view_rm.png)
+
 ## Installation 
 
 Install PostgreSQL (Mac OSX)
