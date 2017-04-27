@@ -1,0 +1,121 @@
+/* -------------------------------- HOME PAGE -------------------------------- */
+
+#casa {
+    background: url(/static/images/home_page.jpg) no-repeat center;
+    background-size: cover;
+    height: 100%;
+   
+}
+
+html {
+    height: 100%;
+}
+
+#home-text {
+    color:white;
+    font-weight:bolder;
+    text-align: center;
+    margin: 100px 100px 100px 100px; 
+    background: rgba(244, 82, 81, 0.85);
+    font-family: 'Lobster', cursive;
+}
+
+/* -------------------------------- NAV BAR -------------------------------- */
+.navbar-default .navbar-nav>li>a {
+    color: white;
+    font-weight: bold;
+}
+
+.navbar-default {
+background-color:#f45151;    
+}
+
+.navbar-default .navbar-brand {
+    color:white;
+    font-weight:bold;
+}
+
+
+#logo-nav {
+    margin: 15px;
+    margin-left: -10px;
+}
+
+
+/*.navbar navbar-default {
+    background: rgba(244, 82, 81, 0.85);
+    height: 100%;
+}
+*/
+
+/* -------------------------------- DASHBOARD -------------------------------- */
+
+body {
+    background: url(/static/images/home_blur3.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.all-columns {
+    color: white;
+    height: auto;
+    margin-top: -20px;
+    margin-bottom: 50px;
+  /*  text-align: center;*/
+}
+
+.dash-columns {
+  /*  background: rgba(244, 82, 81, 0.80);*/
+    color:  white;
+    height: 400px;
+    margin-top: -20px;
+    margin-bottom: 50px;
+    text-align: center;
+
+}
+
+
+.submit-button {
+    border : solid 1px #26151d;;
+    border-radius : 20px 3px 20px 4px ;
+    moz-border-radius : 20px 3px 20px 4px ;
+    -webkit-box-shadow : inset 0px 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow : inset 0px 0px 1px rgba(0,0,0,0.7);
+    box-shadow : inset 0px 0px 1px rgba(0,0,0,0.7);
+    font-size : 20px;
+    color : #ffffff;
+    padding : 1px 17px;
+    background-color : #f45151;
+}
+
+
+.color-salmon {
+    background-color : #f45151;
+
+}
+
+.pics {
+    margin: 15px; 
+    border-radius: 50%;
+}
+
+
+
+.main-text-color {
+text-fill-color: #f45151;
+color:#f45151;
+}
+
+.quote-text {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+
+}
+
+
+.add-book {
+    background-color: white;
+    border-radius: 50%;
+}
+
+
+
