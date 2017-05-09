@@ -1,12 +1,12 @@
-# NextRead
+# BookList
 
 
-NextRead is the 4 week project that I completed during my time as an software engineering fellow at Hackbright. 
-NextRead is a reading list and book recommendations site, ideally by knowing what to read next you spend less time finding your
-next read and read more books. NextRead is powered by the Typeahead Javascript library and the Goodreads API so that a user 
+BookList is the 4 week project that I completed during my time as an software engineering fellow at Hackbright. 
+BookList is a reading list and book recommendations site, ideally by knowing what to read next you spend less time finding your
+next read and read more books. BookList is powered by the Typeahead Javascript library and the Goodreads API so that a user 
 does not have to spend time remembering book titles/authors and can add a book to their reading list on the go. 
 
-##Contents
+# Contents
 
 Technologies
 [Database Model](#database model)
@@ -22,14 +22,14 @@ APIs: Goodreads
 # Features
 
 ## Homepage
-![alt text](https://github.com/meda123/NextRead/blob/master/static/images/homepage_rm.png)
+![alt text](https://github.com/meda123/BookList/blob/master/static/images/homepage_rm.png)
 
 ## Dashboard
-![alt text](https://github.com/meda123/NextRead/blob/master/static/images/Dashboard_rm.png)
-![alt text](https://github.com/meda123/NextRead/blob/master/static/images/typeahead_rm.png)
+![alt text](https://github.com/meda123/BookList/blob/master/static/images/Dashboard_rm.png)
+![alt text](https://github.com/meda123/BookList/blob/master/static/images/typeahead_rm.png)
 
 ## View Lists
-![alt text](https://github.com/meda123/NextRead/blob/master/static/images/list_view_rm.png)
+![alt text](https://github.com/meda123/BookList/blob/master/static/images/list_view_rm.png)
 
 ## Installation 
 
@@ -37,8 +37,8 @@ Install PostgreSQL (Mac OSX)
 
 Clone or fork this repo:
 
-https://github.com/meda123/NextRead
-Create and activate a virtual environment inside your NextRead directory:
+https://github.com/meda123/BookList
+Create and activate a virtual environment inside your BookList directory:
 
 virtualenv env
 source env/bin/activate
@@ -61,4 +61,4 @@ python model.py
 Run the app:
 
 python server.py
-You can now navigate to 'localhost:5000/' to access NextRead.
+You can now navigate to 'localhost:5000/' to access BookList.
